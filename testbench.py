@@ -67,18 +67,20 @@ def run_testbench(args):
 
     modes = ['dict', 'content', 'service', 'script', 'all']
 
-    for iteration in range(iterations):
-        print(f'==== Iteration #{iteration} ====\n')
+    for iteration in range(1, iterations+1):
+        iter_start = datetime.now()
+
+        print(f'==== Iteration #{iteration} ====')
         for mode in modes:
-            print(f'==== Testing mode {mode} ====\n')
+            print(f'\n==== Testing mode {mode} ====\n')
 
             threads = []
 
             for target in targets:
                 site = target.replace('/', '')[-1:]
-                out_name = f'out_{site}_{mode}_{iteration}.txt'
-                transcript_path = f'{out_dir}/transcript_{site}_{mode}_{iteration}.txt'
-                cmd = f'python {dirb_script} {target} -m {mode} -o {out_dir}/{out_name} -w {wordlist_file} -x txt,html,php'
+                out_name = f'out_{mode}_site{site}_{iteration}.txt'
+                transcript_path = f'{out_dir}/transcript_{mode}_site{site}_{iteration}.txt'
+                cmd = f'python {dirb_script} {target} -m {mode} -o {out_dir}/{out_name} -w {wordlist_file} -x txt,html,php --no_colors'
 
                 thread = run_test(cmd, transcript_path, target)
 
@@ -86,6 +88,10 @@ def run_testbench(args):
 
             for thread in threads:
                 thread.join()
+
+        iter_elapsed = datetime.now() - iter_start
+
+        print(f'\nIteration #{iteration} finished in {iter_elapsed}.\n')
 
 
 
