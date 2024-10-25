@@ -25,6 +25,7 @@ def setup_argument_parser():
     arg_parser.add_argument('-o', dest='out_dir', required=True, help='Directory to write out to.')
     arg_parser.add_argument('-x', dest='exec_dir', required=True, help='Directory of the intellidirb.py script.')
     arg_parser.add_argument('-i', dest='iterations', type=int, default=10, help='Number of times to run each mode against each target.')
+    arg_parser.add_argument('--opts', dest='options', default='', help='Options to pass to script.')
 
     return arg_parser
 
@@ -61,6 +62,7 @@ def run_testbench(args):
     out_dir = args.out_dir
     exec_dir = args.exec_dir
     iterations = args.iterations
+    options = args.options
 
     targets = get_targets(target_file)
     dirb_script = f'{exec_dir}/intellidirb.py'
@@ -80,7 +82,7 @@ def run_testbench(args):
                 site = target.replace('/', '')[-1:]
                 out_name = f'out_{mode}_site{site}_{iteration}.txt'
                 transcript_path = f'{out_dir}/transcript_{mode}_site{site}_{iteration}.txt'
-                cmd = f'python {dirb_script} {target} -m {mode} -o {out_dir}/{out_name} -w {wordlist_file} -x txt,html,php --no_colors'
+                cmd = f'python {dirb_script} {target} -m {mode} -o {out_dir}/{out_name} -w {wordlist_file} {options} --no_colors'
 
                 thread = run_test(cmd, transcript_path, target)
 
