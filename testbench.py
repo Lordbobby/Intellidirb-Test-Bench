@@ -82,7 +82,7 @@ def run_testbench(args):
                 site = target.replace('/', '')[-1:]
                 out_name = f'out_{mode}_site{site}_{iteration}.txt'
                 transcript_path = f'{out_dir}/transcript_{mode}_site{site}_{iteration}.txt'
-                cmd = f'python {dirb_script} {target} -m {mode} -o {out_dir}/{out_name} -w {wordlist_file} {options} --no_colors'
+                cmd = f'python {dirb_script} {target} -m {mode} -o {out_dir}/{out_name} -w {wordlist_file} -t 8 {options} --no_colors'
 
                 thread = run_test(cmd, transcript_path, target)
 
