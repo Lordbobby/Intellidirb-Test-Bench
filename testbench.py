@@ -41,7 +41,9 @@ def get_targets(target_filepath):
 
         return words
 
-def thread_runner(cmd, transcript_file_path, target):
+def run_test(cmd, transcript_file_path, target):
+    print(f'Processing {target}.')
+
     with open(transcript_file_path, 'w') as transcript:
         process_start = datetime.now()
         result = subprocess.call(cmd, stdout=transcript)
@@ -49,12 +51,6 @@ def thread_runner(cmd, transcript_file_path, target):
         process_elapsed = datetime.now() - process_start
 
         print(f'{target} finished in {process_elapsed} with status code {result}.')
-
-def run_test(cmd, transcript_file_path, target):
-    thread = Thread(target=thread_runner, args=(cmd, transcript_file_path, target))
-    thread.start()
-
-    return thread
 
 def run_testbench(args):
     wordlist_file = args.wordlist
@@ -76,26 +72,20 @@ def run_testbench(args):
         for mode in modes:
             print(f'\n==== Testing mode {mode} ====\n')
 
-            threads = []
-
             for target in targets:
                 site = target.replace('/', '')[-1:]
                 out_name = f'out_{mode}_site{site}_{iteration}.txt'
                 transcript_path = f'{out_dir}/transcript_{mode}_site{site}_{iteration}.txt'
-                cmd = f'python {dirb_script} {target} -m {mode} -o {out_dir}/{out_name} -w {wordlist_file} -t 8 {options} --no_colors'
 
-                thread = run_test(cmd, transcript_path, target)
+                for i in range(1, 15):
+                    print(f'thread test #{i}')
+                    cmd = f'python {dirb_script} {target} -m {mode} -o {out_dir}/{out_name} -w {wordlist_file} -t {i} {options} --no_colors'
 
-                threads.append(thread)
-
-            for thread in threads:
-                thread.join()
+                    run_test(cmd, transcript_path, target)
 
         iter_elapsed = datetime.now() - iter_start
 
         print(f'\nIteration #{iteration} finished in {iter_elapsed}.\n')
-
-
 
 if __name__ == '__main__':
     print_header()
