@@ -77,11 +77,9 @@ def run_testbench(args):
                 out_name = f'out_{mode}_site{site}_{iteration}.txt'
                 transcript_path = f'{out_dir}/transcript_{mode}_site{site}_{iteration}.txt'
 
-                for i in range(1, 15):
-                    print(f'thread test #{i}')
-                    cmd = f'python {dirb_script} {target} -m {mode} -o {out_dir}/{out_name} -w {wordlist_file} -t {i} {options} --no_colors'
+                cmd = f'python {dirb_script} {target} -m {mode} -o {out_dir}/{out_name} -w {wordlist_file} -t 9 {options} --no_colors'
 
-                    run_test(cmd, transcript_path, target)
+                run_test(cmd, transcript_path, target)
 
         iter_elapsed = datetime.now() - iter_start
 
