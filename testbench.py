@@ -63,7 +63,8 @@ def run_testbench(args):
     targets = get_targets(target_file)
     dirb_script = f'{exec_dir}/intellidirb.py'
 
-    modes = ['dict', 'content', 'service', 'script', 'all']
+    #modes = ['dict', 'content', 'service', 'script', 'all']
+    modes = ['dict', 'all']
 
     for iteration in range(1, iterations+1):
         iter_start = datetime.now()
